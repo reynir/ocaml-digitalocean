@@ -1,0 +1,101 @@
+########################################################################
+# Phony targets are scoped, so you probably want to declare them first.
+#
+
+.PHONY: all install clean
+
+########################################################################
+# Subdirectories.
+# You may want to include some subdirectories in this project.
+# If so, define the subdirectory targets and uncomment this section.
+#
+
+.SUBDIRS: src
+
+################################################
+# Configuration.  You may want to modify any of these configuration
+# variables.
+#
+
+#
+# This project requires ocamlfind (default - false).
+#
+USE_OCAMLFIND = true
+
+OCAMLPACKS[] =
+   yojson
+   netclient
+   equeue-ssl
+   atdgen
+   ssl
+
+if $(not $(OCAMLFIND_EXISTS))
+   eprintln(This project requires ocamlfind, but is was not found.)
+   eprintln(You need to install ocamlfind and run "omake --configure".)
+   exit 1
+
+#
+# Include path
+#
+OCAMLINCLUDES += $(dir src)
+
+#
+# Compile native or byte code? 
+#
+# The default values are defined as follows:
+#
+# NATIVE_ENABLED = $(OCAMLOPT_EXISTS)
+# BYTE_ENABLED = $(not $(OCAMLOPT_EXISTS))
+BYTE_ENABLED = true
+NATIVE_ENABLED = false
+
+#
+# Various options
+#
+OCAMLFLAGS    +=
+OCAMLCFLAGS   += -g
+OCAMLOPTFLAGS +=
+OCAML_LINK_FLAGS +=
+OCAML_BYTE_LINK_FLAGS +=
+OCAML_NATIVE_LINK_FLAGS +=
+
+################################################
+# Generated files
+#
+# Workaround for the fact that ocamldep does not pay attention to .mll
+# and .mly files.
+#
+# OCamlGeneratedFiles(parser.ml lexer.ml)
+
+################################################
+# Build an OCaml library
+#
+
+# FILES[] =
+#    file1
+#    file2
+#
+# LIB = main
+#
+# .DEFAULT: $(OCamlLibrary $(LIB), $(FILES))
+
+################################################
+# Build an OCaml program
+#
+
+FILES[] =
+   main
+
+PROGRAM = digitalocean
+OCAML_LIBS += src/apiKey src/digitalocean
+OCAML_CLIBS +=
+OCAML_OTHER_LIBS +=
+OCAML_LIB_FLAGS +=
+
+OCamlProgram($(PROGRAM), $(FILES))
+
+.DEFAULT: src/ $(PROGRAM)
+
+.PHONY: clean
+clean:
+	rm -f *.cm[ioxa] *.cmx[as] *.[oa] $(PROGRAM) $(PROGRAM).run
