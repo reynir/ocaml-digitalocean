@@ -14,5 +14,6 @@ let () =
   let () = Digitalocean.init () in
   let api = ApiKey_j.api_of_string (load_file "../do.json") in
   let droplets = Digitalocean.droplets api in
-  print_endline (Json.pretty_to_string (Json.from_string droplets))
-
+  let regions = Digitalocean.regions api in
+  print_endline (Json.pretty_to_string (Json.from_string droplets));
+  print_endline (Json.pretty_to_string (Json.from_string regions))
