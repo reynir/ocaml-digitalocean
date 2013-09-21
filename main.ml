@@ -9,11 +9,15 @@ let load_file f =
   close_in ic;
   s
 
+let pretty json_string =
+  Json.pretty_to_string (Json.from_string json_string)
+
 
 let () =
   let () = Digitalocean.init () in
   let api = ApiKey_j.api_of_string (load_file "../do.json") in
   let droplets = Digitalocean.droplets api in
   let regions = Digitalocean.regions api in
-  print_endline (Json.pretty_to_string (Json.from_string droplets));
-  print_endline (Json.pretty_to_string (Json.from_string regions))
+  print_endline (pretty droplets);
+  print_endline (pretty regions);
+  print_endline (pretty (Digitalocean.domains api))
