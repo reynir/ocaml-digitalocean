@@ -96,6 +96,10 @@ OCamlProgram($(PROGRAM), $(FILES))
 
 .DEFAULT: $(PROGRAM)
 
+OCAMLLINK = $(OCAMLMKTOP)
+OCamlProgram(top, $(EMPTY))
+
+
 .PHONY: clean
 clean:
 	rm -f *.cm[ioxa] *.cmx[as] *.[oa] $(PROGRAM) $(PROGRAM).run
