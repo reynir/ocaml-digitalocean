@@ -94,7 +94,7 @@ OCAML_LIB_FLAGS +=
 
 OCamlProgram($(PROGRAM), $(FILES))
 
-.DEFAULT: src/ $(PROGRAM)
+.DEFAULT: $(PROGRAM)
 
 .PHONY: clean
 clean:
