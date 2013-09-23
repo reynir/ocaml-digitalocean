@@ -10,7 +10,22 @@ let () =
   let () = DO.init () in
   let api = load_api_from_file "../do.json" in
   let droplets = DO.droplets api in
-  let regions = DO.regions api in
+  let domains = DO.domains api in
   print_endline (pretty droplets);
-  print_endline (pretty regions);
-  print_endline (pretty (DO.domains api))
+  match domains with
+  | `Assoc xs ->
+    (match List.assoc "domains" xs with
+    | `List domains ->
+      let domain_ids : int list =
+	List.map
+	  (function `Assoc xs ->
+	    (match List.assoc "id" xs with
+	    | `Int id -> id
+	    | _ -> failwith "Malformed response")
+	  | _ -> failwith "Malformed response")
+	  domains
+      in
+      List.iter (fun j -> print_endline (pretty j))
+	(List.map (DO.get_domain_records api) domain_ids)
+    | _ -> failwith "Malformed response")
+  | _ -> failwith "Malformed response"
