@@ -22,11 +22,7 @@ provide `-I /path/to/digitalocean.cmi` as an argument. Example:
 ## TODO ##
 
 - [X] Implement the rest of the API.
-
 - [X] Better types for the function arguments.
-
 - [ ] A command line utility instead of the current "test" program.
-
 - [X] Make all functions return Json instead of string (?)
-
 - [ ] List of dependencies
