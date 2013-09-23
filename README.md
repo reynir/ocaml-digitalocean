@@ -26,3 +26,5 @@ provide `-I /path/to/digitalocean.cmi` as an argument. Example:
 - [ ] A command line utility instead of the current "test" program.
 - [x] Make all functions return Json instead of string (?)
 - [ ] List of dependencies
+- [ ] Declare types for each response using atdgen to make the responses easier
+      to work with.
