@@ -22,7 +22,7 @@ API_FILES = apiKey_t apiKey_j
 Atdgen(apiKey, -j-std)
 OCamlLibrary(apiKey, $(API_FILES))
 
-DO_FILES = digitalocean
+DO_FILES = digitalocean util
 OCamlLibrary(digitalocean, $(DO_FILES))
 
 clean:
