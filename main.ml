@@ -9,8 +9,8 @@ let load_file f =
   close_in ic;
   s
 
-let pretty json_string =
-  Json.pretty_to_string (Json.from_string json_string)
+let pretty json =
+  Json.pretty_to_string json
 
 
 let () =
