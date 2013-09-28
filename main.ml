@@ -9,8 +9,8 @@ let pretty json =
 let () =
   let () = DO.init () in
   let api = load_api_from_file "../do.json" in
-  let droplets = DO.droplets api in
-  let domains = DO.domains api in
+  let droplets = DO.droplets_raw api in
+  let domains = DO.domains_raw api in
   print_endline (pretty droplets);
   match domains with
   | `Assoc xs ->
@@ -26,6 +26,6 @@ let () =
 	  domains
       in
       List.iter (fun j -> print_endline (pretty j))
-	(List.map (DO.get_domain_records api) domain_ids)
+	(List.map (DO.get_domain_records_raw api) domain_ids)
     | _ -> failwith "Malformed response")
   | _ -> failwith "Malformed response"
