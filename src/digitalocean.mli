@@ -6,6 +6,7 @@ val droplets_raw : ApiKey_t.api -> Yojson.Safe.json
 val new_droplet_raw : ApiKey_t.api ->
   ?priv:bool -> string -> int -> int -> int -> int list -> Yojson.Safe.json
 val get_droplet_raw : ApiKey_t.api -> int -> Yojson.Safe.json
+val get_droplet : ApiKey_t.api -> int -> Responses_t.get_droplet
 val reboot_droplet_raw : ApiKey_t.api -> int -> Yojson.Safe.json
 val power_cycle_droplet_raw : ApiKey_t.api -> int -> Yojson.Safe.json
 val shutdown_droplet_raw : ApiKey_t.api -> int -> Yojson.Safe.json

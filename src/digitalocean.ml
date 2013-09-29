@@ -2,6 +2,7 @@ module Json = Yojson.Safe
 open Http_client.Convenience
 open ApiKey_t
 module Url = Netencoding.Url
+open Responses_j
 
 let request
     (api : api)
@@ -49,6 +50,10 @@ let new_droplet_raw api ?(priv=false) name size image region ssh_keys  =
   
 let get_droplet_raw api id =
   request api ("droplets/"^string_of_int id) []
+
+let get_droplet api id =
+  let resp = get_droplet_raw api id
+  in get_droplet_of_string (Json.to_string resp)
 
 let reboot_droplet_raw api id =
   droplet_method api id "reboot" []

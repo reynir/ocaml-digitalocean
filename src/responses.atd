@@ -1,0 +1,104 @@
+type generic_response = {
+  status : string;
+}
+type error = {
+  error_message : string;
+}
+type droplets = {
+  droplets : droplet list;
+}
+type event = {
+  event_id : int <ocaml repr="int64">;
+}
+type get_droplet = {
+  droplet : droplet
+}
+type droplet = {
+  id : int <ocaml repr="int64">;
+  name : string;
+  image_id : int <ocaml repr="int64">;
+  size_id : int <ocaml repr="int64">;
+  region_id : int <ocaml repr="int64">;
+  backups_active : bool;
+  ip_address : string;
+  private_ip_address : string nullable;
+  locked : bool;
+  status : string;
+  created_at : string;
+  (* Poorly documented fields *)
+  (* backups : ? list; *)
+  (* snapshots : ? list; *)
+} <ocaml field_prefix="droplet_">
+type regions = {
+  regions : region list;
+}
+type region = {
+  id : int <ocaml repr="int64">;
+  name : string;
+} <ocaml field_prefix="region_">
+type images = {
+  images : image list;
+}
+type image = {
+  id : int <ocaml repr="int64">;
+  name : string;
+  distribution : string;
+} <ocaml field_prefix="image_">
+type ssh_keys = {
+  ssh_keys : ssh_keys_elt list;
+}
+type ssh_keys_elt = {
+  id : int <ocaml repr="int64" name="ssh_keys_elt_id">;
+  name : string <ocaml name="ssh_keys_elt_name">;
+} <ocaml field_prefix="ssh_keys_elt_">
+type ssh_key = {
+  id <ocaml  name="ssh_key_id"> : int <ocaml repr="int64">;
+  name <ocaml name="ssh_key_name"> : string;
+  ssh_pub_key : string;
+}
+type sizes = {
+  sizes : size list;
+}
+type size = {
+  id : int <ocaml repr="int64">;
+  name : string;
+  (* Undocumented fields ahead *)
+  ?memory : int option;
+  ?cpu : int option;
+  ?disk : int option;
+  ?cost_per_hour : float option;
+  (* No idea why this is a string *)
+  ?cost_per_month : string option;
+} <ocaml field_prefix="size_">
+type domains = {
+  domains : domain list;
+}
+type domain = {
+  id : int <ocaml repr="int64">;
+  name : string;
+  ttl : int;
+  live_zone_file : string;
+  (* The following fields are not well documented hence left out *)
+  (* error *)
+  (* zone_file_with_error *)
+} <ocaml field_prefix="domain_">
+type new_domain = {
+  domain : new_domain'
+}
+type new_domain' = {
+  id : int <ocaml repr="int64">;
+  name : string;
+} <ocaml field_prefix="new_domain_">
+type records = {
+  records : record list;
+}
+type record = {
+  id : int <ocaml repr="int64">;
+  domain_id : int <ocaml repr="int64">;
+  record_type : string;
+  data : string;
+  name : string nullable;
+  priority : int nullable;
+  port : int nullable;
+  weight : int nullable;
+} <ocaml field_prefix="record">
