@@ -1,6 +1,7 @@
 exception Error of Responses_t.error
 
 val request : ApiKey_t.api -> string -> (string * string) list -> string
+val debug : bool ref
 
 val init : unit -> unit
 

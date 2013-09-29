@@ -6,6 +6,8 @@ open Responses_j
 
 exception Error of Responses_t.error
 
+let debug = ref false
+
 let request
     (api : api)
     (resource : string)
@@ -19,6 +21,7 @@ let request
       (("client_id", api.id)
        :: ("api_key", api.key)
        :: args) in
+  let () = if !debug then print_endline url else () in
   try let reply = http_get url
       in match (generic_response_of_string reply).status with
       | "OK" -> reply
@@ -266,7 +269,7 @@ let to_record s =
   (get_record_of_string s).record
 
 let new_domain_record_raw api id args =
-  domain_method api id "new" args
+  domain_method api id "records/new" args
 
 let get_domain_record_raw api domain record =
   domain_method api domain ("records/"^string_of_int record) []
