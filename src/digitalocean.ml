@@ -263,7 +263,7 @@ let get_domain_records api id =
   (records_of_string (get_domain_records_raw api id)).records
 
 let to_record s =
-  (get_record_of_string s).domain_record
+  (get_record_of_string s).record
 
 let new_domain_record_raw api id args =
   domain_method api id "new" args

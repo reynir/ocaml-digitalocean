@@ -102,7 +102,7 @@ type records = {
   records : record list;
 }
 type get_record = {
-  domain_record : record;
+  record : record;
 }
 type record = {
   id : int;
