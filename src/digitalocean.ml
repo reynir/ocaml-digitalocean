@@ -226,57 +226,102 @@ let destroy_ssh_key api key =
 let sizes_raw api =
   request api "sizes" []
 
+let sizes api =
+  (sizes_of_string (sizes_raw api)).sizes
+
 let domains_raw api =
   request api "domains" []
+
+let domains api =
+  (domains_of_string (domains_raw api)).domains
 
 let new_domain_raw api name ip =
   request api "domains/new" [("name", name); ("ip_address", ip)]
 
+let new_domain api name ip =
+  (new_domain'_of_string (new_domain_raw api name ip)).new_domain
+
 let get_domain_raw api id =
   request api ("domains/" ^ string_of_int id) []
+
+let get_domain api id =
+  (get_domain_of_string (get_domain_raw api id)).domain
 
 let domain_method api id resource args =
   request api (Printf.sprintf "domains/%d/%s" id resource) args
 
 let destroy_domain_raw api id =
   domain_method api id "destroy" []
- 
+
+let destroy_domain api id =
+  ignore (destroy_domain_raw api id)
+
 let get_domain_records_raw api id =
   domain_method api id "records" []
 
-let new_domain_record api id args =
+let get_domain_records api id =
+  (records_of_string (get_domain_records_raw api id)).records
+
+let to_record s =
+  (get_record_of_string s).domain_record
+
+let new_domain_record_raw api id args =
   domain_method api id "new" args
 
+let get_domain_record_raw api domain record =
+  domain_method api domain ("records/"^string_of_int record) []
+
+let get_domain_record api domain record =
+  to_record (get_domain_record_raw api domain record)
+
 let new_CNAME_raw api id name hostname =
-  new_domain_record api id [("record_type", "CNAME");
+  new_domain_record_raw api id [("record_type", "CNAME");
 			    ("name", name);
 			    ("data", hostname)]
 
+let new_CNAME api id name hostname =
+  to_record (new_CNAME_raw api id name hostname)
+
 let new_A_raw api id name ip =
-  new_domain_record api id [("record_type", "A");
+  new_domain_record_raw api id [("record_type", "A");
 			    ("name", name);
 			    ("data", ip)]
 
+let new_A api id name ip =
+  to_record (new_A_raw api id name ip)
+
 let new_MX_raw api id priority hostname =
-  new_domain_record api id [("record_type", "MX");
+  new_domain_record_raw api id [("record_type", "MX");
 			    ("priority", string_of_int priority);
 			    ("data", hostname)]
 
+let new_MX api id priority hostname =
+  to_record (new_MX_raw api id priority hostname)
+
 let new_TXT_raw api id name data =
-  new_domain_record api id [("record_type", "TXT");
+  new_domain_record_raw api id [("record_type", "TXT");
 			    ("name", name);
 			    ("data", data)]
 
+let new_TXT api id name data =
+  to_record (new_TXT_raw api id name data)
+
 let new_NS_raw api id ns =
-  new_domain_record api id [("record_type", "NS"); ("data", ns)]
+  new_domain_record_raw api id [("record_type", "NS"); ("data", ns)]
+
+let new_NS api id ns =
+  to_record (new_NS_raw api id ns)
 
 let new_SRV_raw api id name hostname priority port weight =
-  new_domain_record api id [("record_type", "SRV");
+  new_domain_record_raw api id [("record_type", "SRV");
 			    ("name", name);
 			    ("data", hostname);
 			    ("priority", string_of_int priority);
 			    ("port", string_of_int port);
 			    ("weight", string_of_int weight)]
+
+let new_SRV api id name hostname priority port weight =
+  to_record (new_SRV_raw api id name hostname priority port weight)
 
 let init () =
   Ssl.init();

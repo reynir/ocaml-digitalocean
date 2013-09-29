@@ -30,6 +30,19 @@ val new_ssh_key : ApiKey_t.api -> string -> string -> Responses_t.ssh_key
 val get_ssh_key : ApiKey_t.api -> int -> Responses_t.ssh_key
 val edit_ssh_key : ApiKey_t.api -> int -> string -> Responses_t.ssh_key
 val destroy_ssh_key : ApiKey_t.api -> int -> unit
+val sizes : ApiKey_t.api -> Responses_t.size list
+val domains : ApiKey_t.api -> Responses_t.domain list
+val get_domain : ApiKey_t.api -> int -> Responses_t.domain
+val new_domain : ApiKey_t.api -> string -> string -> Responses_t.new_domain
+val destroy_domain : ApiKey_t.api -> int -> unit
+val get_domain_records : ApiKey_t.api -> int -> Responses_t.record list
+val get_domain_record : ApiKey_t.api -> int -> int -> Responses_t.record
+val new_CNAME : ApiKey_t.api -> int -> string -> string -> Responses_t.record
+val new_A : ApiKey_t.api -> int -> string -> string -> Responses_t.record
+val new_MX : ApiKey_t.api -> int -> int -> string -> Responses_t.record
+val new_TXT : ApiKey_t.api -> int -> string -> string -> Responses_t.record
+val new_NS : ApiKey_t.api -> int -> string -> Responses_t.record
+val new_SRV : ApiKey_t.api -> int -> string -> string -> int -> int -> int -> Responses_t.record
 
 val droplets_raw : ApiKey_t.api -> string
 val new_droplet_raw : ApiKey_t.api ->
@@ -65,6 +78,7 @@ val new_domain_raw : ApiKey_t.api -> string -> string -> string
 val get_domain_raw : ApiKey_t.api -> int -> string
 val destroy_domain_raw : ApiKey_t.api -> int -> string
 val get_domain_records_raw : ApiKey_t.api -> int -> string
+val get_domain_record_raw : ApiKey_t.api -> int -> int -> string
 val new_CNAME_raw : ApiKey_t.api -> int -> string -> string -> string
 val new_A_raw : ApiKey_t.api -> int -> string -> string -> string
 val new_MX_raw : ApiKey_t.api  -> int -> int -> string -> string

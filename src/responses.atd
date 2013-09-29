@@ -79,6 +79,9 @@ type size = {
 type domains = {
   domains : domain list;
 }
+type get_domain = {
+  domain : domain;
+}
 type domain = {
   id : int;
   name : string;
@@ -88,23 +91,26 @@ type domain = {
   (* error *)
   (* zone_file_with_error *)
 } <ocaml field_prefix="domain_">
-type new_domain = {
-  domain : new_domain'
-}
 type new_domain' = {
+  domain <ocaml name="new_domain"> : new_domain
+}
+type new_domain = {
   id : int;
   name : string;
 } <ocaml field_prefix="new_domain_">
 type records = {
   records : record list;
 }
+type get_record = {
+  domain_record : record;
+}
 type record = {
   id : int;
   domain_id : int;
-  record_type : string;
+  record_type <ocaml name="record_type"> : string;
   data : string;
   name : string nullable;
   priority : int nullable;
   port : int nullable;
   weight : int nullable;
-} <ocaml field_prefix="record">
+} <ocaml field_prefix="record_">
