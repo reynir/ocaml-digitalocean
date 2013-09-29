@@ -2,8 +2,8 @@ type generic_response = {
   status : string;
 }
 type error = {
-  error_message : string;
-}
+  message : string;
+} <ocaml field_prefix="error_">
 type droplets = {
   droplets : droplet list;
 }
@@ -54,6 +54,9 @@ type ssh_keys_elt = {
   id : int;
   name : string;
 } <ocaml field_prefix="ssh_keys_elt_">
+type get_ssh_key = {
+  ssh_key : ssh_key;
+}
 type ssh_key = {
   id <ocaml  name="ssh_key_id"> : int;
   name <ocaml name="ssh_key_name"> : string;

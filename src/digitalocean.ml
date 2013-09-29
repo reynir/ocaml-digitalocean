@@ -4,6 +4,8 @@ open ApiKey_t
 module Url = Netencoding.Url
 open Responses_j
 
+exception Error of Responses_t.error
+
 let request
     (api : api)
     (resource : string)
@@ -17,14 +19,23 @@ let request
       (("client_id", api.id)
        :: ("api_key", api.key)
        :: args) in
-  let reply = http_get url in
-  match (generic_response_of_string reply).status with
-  | "OK" -> reply
-  | _ -> failwith "Reply was not wellformed!"
+  try let reply = http_get url
+      in match (generic_response_of_string reply).status with
+      | "OK" -> reply
+      | "ERROR" -> raise (Error (error_of_string reply))
+      | _ -> failwith "Reply was not wellformed!"
+  with
+  | Http_client.Http_error (401, access_denied) ->
+    raise (Error (error_of_string access_denied))
+  | Http_client.Http_error (404, not_found) ->
+    raise (Error (error_of_string not_found))
+  | Http_client.Http_error (ret_code, resp) ->
+    raise (Error (error_of_string resp))
+
 
 let droplets_raw (api : api) =
   request api "droplets" []
-    
+
 let droplets api =
   (droplets_of_string (droplets_raw api)).droplets
 
@@ -144,7 +155,7 @@ let regions_raw api =
   request api "regions" []
 
 let regions api =
-  regions_of_string (regions_raw api)
+  (regions_of_string (regions_raw api)).regions
 
 let images_raw ?(filter="") api =
   request api "images"
@@ -158,23 +169,41 @@ let images ?(filter="") api =
 let get_image_raw api image =
   request api ("images/"^string_of_int image) []
 
+let get_image api image =
+  (get_image_of_string (get_image_raw api image)).get_image
+
 let image_method api image resource args =
   request api (Printf.sprintf "images/%d/%s" image resource) args
 
 let destroy_image_raw api image =
   image_method api image "destroy" []
 
+let destroy_image api image =
+  ignore (destroy_image_raw api image)
+
 let transfer_image_raw api image region =
   image_method api image "transfer" [("region_id", string_of_int region)]
+
+let transfer_image api image region =
+  ignore (transfer_image_raw api image region)
 
 let ssh_keys_raw api =
   request api "ssh_keys" []
 
+let ssh_keys api =
+  (ssh_keys_of_string (ssh_keys_raw api)).ssh_keys
+
 let new_ssh_key_raw api name key =
   request api "ssh_keys/new" [("name", name); ("ssh_pub_key", key)]
 
+let new_ssh_key api name key =
+  (get_ssh_key_of_string (new_ssh_key_raw api name key)).ssh_key
+
 let get_ssh_key_raw api key =
   request api ("ssh_keys/" ^ string_of_int key) []
+
+let get_ssh_key api key =
+  (get_ssh_key_of_string (get_ssh_key_raw api key)).ssh_key
 
 let ssh_key_method api key resource args =
   request api (Printf.sprintf "ssh_keys/%d/%s" key resource) args
@@ -182,11 +211,17 @@ let ssh_key_method api key resource args =
 let edit_ssh_key_raw api key new_key =
   ssh_key_method api key "edit" [("ssh_pub_key", new_key)]
 
+let edit_ssh_key api key new_key =
+  (get_ssh_key_of_string (edit_ssh_key_raw api key new_key)).ssh_key
+
 (* Documentation says another argument is required:
    > "ssh_pub_key Required, String, the new public SSH key"
-   But I thin that's wrong. *)
+   But I think that's an error - why would you supply a key? *)
 let destroy_ssh_key_raw api key =
   ssh_key_method api key "destroy" []
+
+let destroy_ssh_key api key =
+  ignore (destroy_ssh_key_raw api key)
 
 let sizes_raw api =
   request api "sizes" []
