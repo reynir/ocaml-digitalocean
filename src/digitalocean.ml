@@ -24,6 +24,9 @@ let request
 
 let droplets_raw (api : api) =
   request api "droplets" []
+    
+let droplets api =
+  (droplets_of_string (droplets_raw api)).droplets
 
 let droplet_method api id meth args =
   request
@@ -50,59 +53,107 @@ let get_droplet_raw api id =
 
 let get_droplet api id =
   let resp = get_droplet_raw api id
-  in get_droplet_of_string resp
+  in (get_droplet_of_string resp).droplet
 
 let reboot_droplet_raw api id =
   droplet_method api id "reboot" []
 
+let reboot_droplet api id =
+  event_of_string (reboot_droplet_raw api id)
+
 let power_cycle_droplet_raw api id =
   droplet_method api id "power_cycle" []
+    
+let power_cycle_droplet api id =
+  event_of_string (power_cycle_droplet_raw api id)
 
 let shutdown_droplet_raw api id =
   droplet_method api id "shutdown" []
 
+let shutdown_droplet api id =
+  event_of_string (shutdown_droplet_raw api id)
+
 let power_off_droplet_raw api id =
   droplet_method api id "power_off" []
+
+let power_off_droplet api id =
+  event_of_string (power_off_droplet_raw api id)
 
 let power_on_droplet_raw api id =
   droplet_method api id "power_on" []
 
+let power_on_droplet api id =
+  event_of_string (power_on_droplet_raw api id)
+
 let reset_password_raw api id =
   droplet_method api id "password_reset" []
 
+let reset_password api id =
+  event_of_string (reset_password_raw api id)
+
 let resize_droplet_raw api id size =
   droplet_method api id "resize" [("size_id", string_of_int size)]
+
+let resize_droplet api id size =
+  event_of_string (resize_droplet_raw api id size)
 
 let snapshot_droplet_raw api ?(name="") id =
   let args = if name = "" then [] else [("name", name)] in
   droplet_method api id "snapshot" args
 
+let snapshot_droplet api ?(name="") id =
+  event_of_string (snapshot_droplet_raw api ~name:name id)
+
 let restore_droplet_raw api id image =
   droplet_method api id "restore" [("image_id", string_of_int image)]
+
+let restore_droplet api id image =
+  event_of_string (restore_droplet_raw api id image)
 
 let rebuild_droplet_raw api id image =
   droplet_method api id "rebuild" [("image_id", string_of_int image)]
 
+let rebuild_droplet api id image =
+  event_of_string (rebuild_droplet_raw api id image)
+
 let enable_backups_raw api id =
   droplet_method api id "enable_backups" []
+
+let enable_backups api id =
+  event_of_string (enable_backups_raw api id)
 
 let disable_backups_raw api id =
   droplet_method api id "disable_backups" []
 
+let disable_backups api id =
+  event_of_string (disable_backups_raw api id)
+
 let rename_droplet_raw api id name =
   droplet_method api id "rename" [("name", name)]
+
+let rename_droplet api id name =
+  event_of_string (rename_droplet_raw api id name)
 
 let destroy_droplet_raw api ?(scrub=true) id  =
   droplet_method api id "destroy" [("scrub", string_of_bool scrub)]
 
+let destroy_droplet api ?(scrub=true) id =
+  event_of_string (destroy_droplet_raw api ~scrub:scrub id)
+
 let regions_raw api =
   request api "regions" []
+
+let regions api =
+  regions_of_string (regions_raw api)
 
 let images_raw ?(filter="") api =
   request api "images"
     (if filter = ""
      then []
      else [("filter", filter)])
+
+let images ?(filter="") api =
+  (images_of_string (images_raw ~filter:filter api)).images
 
 let get_image_raw api image =
   request api ("images/"^string_of_int image) []
