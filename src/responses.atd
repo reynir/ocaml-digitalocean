@@ -17,7 +17,7 @@ type droplet = {
   id : int;
   name : string;
   image_id : int;
-  size_id : int
+  size_id : int;
   region_id : int;
   backups_active : bool;
   ip_address : string;
@@ -38,6 +38,9 @@ type region = {
 } <ocaml field_prefix="region_">
 type images = {
   images : image list;
+}
+type get_image = {
+  image <ocaml name="get_image"> : image;
 }
 type image = {
   id : int;
