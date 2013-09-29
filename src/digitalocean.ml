@@ -8,7 +8,7 @@ let request
     (api : api)
     (resource : string)
     (args: (string*string) list)
-    : Json.json =
+    : string =
   let url =
     Printf.sprintf
       "https://api.digitalocean.com/%s/?"
@@ -18,12 +18,9 @@ let request
        :: ("api_key", api.key)
        :: args) in
   let reply = http_get url in
-  match Json.from_string reply with
-  | `Assoc xs ->
-    if List.assoc "status" xs <> `String "OK"
-    then failwith "Status was not OK"
-    else Json.from_string reply
-  | _ -> failwith "Reply was not a json object!"
+  match (generic_response_of_string reply).status with
+  | "OK" -> reply
+  | _ -> failwith "Reply was not wellformed!"
 
 let droplets_raw (api : api) =
   request api "droplets" []
@@ -53,7 +50,7 @@ let get_droplet_raw api id =
 
 let get_droplet api id =
   let resp = get_droplet_raw api id
-  in get_droplet_of_string (Json.to_string resp)
+  in get_droplet_of_string resp
 
 let reboot_droplet_raw api id =
   droplet_method api id "reboot" []
