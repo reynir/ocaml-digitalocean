@@ -277,6 +277,12 @@ let get_domain_record_raw api domain record =
 let get_domain_record api domain record =
   to_record (get_domain_record_raw api domain record)
 
+let destroy_domain_record_raw api domain record =
+  domain_method api domain ("records/"^string_of_int record^"/destroy") []
+
+let destroy_domain_record api domain record =
+  ignore (destroy_domain_record_raw api domain record)
+
 let new_CNAME_raw api id name hostname =
   new_domain_record_raw api id [("record_type", "CNAME");
 			    ("name", name);
