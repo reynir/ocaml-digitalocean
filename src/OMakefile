@@ -27,7 +27,7 @@ RESPONSES_FILES = responses_t responses_j
 Atdgen(responses, -j-std)
 OCamlLibrary(responses, $(RESPONSES_FILES))
 
-DO_FILES = digitalocean util $(RESPONSES_FILES)
+DO_FILES = digitalocean util record $(RESPONSES_FILES)
 OCamlLibrary(digitalocean, $(DO_FILES))
 
 clean:
