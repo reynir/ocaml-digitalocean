@@ -21,9 +21,10 @@ let request
       (("client_id", api.id)
        :: ("api_key", api.key)
        :: args) in
-  let () = if !debug then print_endline url else () in
-  try let reply = http_get url
-      in match (generic_response_of_string reply).status with
+  if !debug then print_endline url;
+  try let reply = http_get url in
+      if !debug then print_endline reply;
+      match (generic_response_of_string reply).status with
       | "OK" -> reply
       | "ERROR" -> raise (Error (error_of_string reply))
       | _ -> failwith "Reply was not wellformed!"
