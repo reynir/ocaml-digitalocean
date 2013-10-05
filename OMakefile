@@ -83,23 +83,22 @@ OCAML_NATIVE_LINK_FLAGS +=
 # Build an OCaml program
 #
 
-FILES[] =
-   main
-
-PROGRAM = digitalocean
 OCAML_LIBS += src/apiKey src/digitalocean
 OCAML_CLIBS +=
 OCAML_OTHER_LIBS +=
 OCAML_LIB_FLAGS +=
 
-OCamlProgram($(PROGRAM), $(FILES))
+OCamlProgram(add-www, add_www)
 
-.DEFAULT: $(PROGRAM)
+OCamlProgram(destroy-www, remove_www)
 
 OCAMLLINK = $(OCAMLMKTOP)
 OCamlProgram(top, $(EMPTY))
 
+.DEFAULT: add-www destroy-www top
 
 .PHONY: clean
 clean:
-	rm -f *.cm[ioxa] *.cmx[as] *.[oa] $(PROGRAM) $(PROGRAM).run
+	rm -f *.cm[ioxa] *.cmx[as] *.[oa] \
+		add-www destroy-www add-www.run destroy-www.run \
+		top top.run
