@@ -1,0 +1,13 @@
+*.omc
+*.cm[oaix]
+*.o
+src/apiKey_[tj].ml
+src/apiKey_[tj].mli
+digitalocean
+digitalocean.run
+top
+top.run
+add-www
+add-www.run
+destroy-www
+destroy-www.run
