@@ -1,4 +1,5 @@
 exception Error of Responses_t.error
+exception BadResponse of string
 
 val request : ApiKey_t.api -> string -> (string * string) list -> string
 val debug : bool ref

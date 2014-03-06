@@ -5,6 +5,7 @@ module Url = Netencoding.Url
 open Responses_j
 
 exception Error of Responses_t.error
+exception BadResponse of string
 
 let debug = ref false
 
@@ -24,10 +25,14 @@ let request
   if !debug then print_endline url;
   try let reply = http_get url in
       if !debug then print_endline reply;
-      match (generic_response_of_string reply).status with
-      | "OK" -> reply
-      | "ERROR" -> raise (Error (error_of_string reply))
-      | _ -> failwith "Reply was not wellformed!"
+      (try
+	 match (generic_response_of_string reply).status with
+	 | "OK" -> reply
+	 | "ERROR" -> raise (Error (error_of_string reply))
+	 | _ -> failwith "Reply was not wellformed!"
+       with (* Blame DigitalOcean :| *)
+       | Yojson.Json_error s -> raise (BadResponse s)
+       | Ag_oj_run.Error s -> raise (BadResponse s))
   with
   | Http_client.Http_error (401, access_denied) ->
     raise (Error (error_of_string access_denied))
