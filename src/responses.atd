@@ -114,3 +114,15 @@ type record = {
   port : int nullable;
   weight : int nullable;
 } <ocaml field_prefix="record_">
+
+type events = {
+  event : event_info;
+} <ocaml field_prefix="events_">
+
+type event_info = {
+  id : int;
+  action_status : string;
+  droplet_id : int;
+  event_type_id : int;
+  percentage : string;
+} <ocaml field_prefix="event_info_">

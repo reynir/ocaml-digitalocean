@@ -338,6 +338,12 @@ let new_SRV_raw api id name hostname priority port weight =
 let new_SRV api id name hostname priority port weight =
   to_record (new_SRV_raw api id name hostname priority port weight)
 
+let event_raw api event_id =
+  request api (Printf.sprintf "droplets/events/%d/" event_id) []
+
+let event api event_id =
+  (events_of_string (event_raw api event_id)).events_event
+
 let init () =
   Ssl.init();
     Http_client.Convenience.configure_pipeline

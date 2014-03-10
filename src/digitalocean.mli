@@ -46,6 +46,7 @@ val new_MX : ApiKey_t.api -> int -> int -> string -> Responses_t.record
 val new_TXT : ApiKey_t.api -> int -> string -> string -> Responses_t.record
 val new_NS : ApiKey_t.api -> int -> string -> Responses_t.record
 val new_SRV : ApiKey_t.api -> int -> string -> string -> int -> int -> int -> Responses_t.record
+val event : ApiKey_t.api -> int -> Responses_t.event_info
 
 val droplets_raw : ApiKey_t.api -> string
 val new_droplet_raw : ApiKey_t.api ->
@@ -89,3 +90,4 @@ val new_MX_raw : ApiKey_t.api  -> int -> int -> string -> string
 val new_TXT_raw : ApiKey_t.api -> int -> string -> string -> string
 val new_NS_raw : ApiKey_t.api -> int -> string -> string
 val new_SRV_raw : ApiKey_t.api -> int -> string -> string -> int -> int -> int -> string
+val event_raw : ApiKey_t.api -> int -> string
