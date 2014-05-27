@@ -6,6 +6,9 @@ add_www.native: examples/add_www.ml
 remove_www.native: examples/remove_www.ml
 	${OCAMLBUILD} examples/remove_www.native
 
+remove_gmail.native: examples/remove_gmail.ml
+	${OCAMLBUILD} examples/remove_gmail.native
+
 digitalocean.cma: src/digitalocean.ml src/digitalocean.mllib
 	${OCAMLBUILD} src/digitalocean.cma
 
