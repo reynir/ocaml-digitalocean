@@ -1,0 +1,2 @@
+<src>: include
+true: package(yojson,netclient,equeue-ssl,atdgen,ssl)
