@@ -15,8 +15,8 @@ digitalocean.cma: src/digitalocean.ml src/digitalocean.mllib
 digitalocean.top: src/digitalocean.ml src/digitalocean.mltop
 	${OCAMLBUILD} src/digitalocean.top
 
+myutop.top: src/digitalocean.ml src/myutop.mltop src/myutop_main.ml
+	${OCAMLBUILD} -pkgs utop,threads src/myutop.top
+
 clean:
-	rm -rf _build/ 
-	rm -f add_www.native
-	rm -f remove_www.native
-	rm -f remove_gmail.native
+	${OCAMLBUILD} -clean
