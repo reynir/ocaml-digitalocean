@@ -1,5 +1,7 @@
 OCAMLBUILD=ocamlbuild -use-ocamlfind
 
+all: add_www.native remove_www.native remove_gmail.native digitalocean.cma digitalocean.top myutop.top
+
 add_www.native: examples/add_www.ml
 	${OCAMLBUILD} examples/add_www.native
 

@@ -11,20 +11,19 @@ let pretty json =
 let () =
   let api = load_api_from_file "../do.json" in
   let name_of_domain domain_id = (DO.get_domain api domain_id).Rt.domain_name in
-  let domains = DO.domains api in
-  let domain_ids = List.map (fun x -> x.Rt.domain_id) domains in
-  let all_domain_records = List.map (DO.get_domain_records api) domain_ids in
-  List.iter
-    (fun domain_records ->
-      let domain_id = (List.hd domain_records).Rt.record_domain_id in
-      if not (List.exists
-		(fun r -> match record_of_responses_record r with
-		| CNAME (_, _, r) -> r.record_CNAME_name = "www"
-		| A (_, _, r) -> r.record_A_name = "www"
-		| _ -> false)
-		domain_records)
-      then (print_endline ("Adding 'www' CNAME to " ^ name_of_domain domain_id);
-	    ignore (DO.new_CNAME api domain_id "www" "@"))
-      else print_endline (name_of_domain domain_id
-			  ^ " already has a 'www' record"))
-    all_domain_records
+  DO.domains api 
+  |> List.map (fun x -> x.Rt.domain_id)
+  |> List.map (DO.get_domain_records api)
+  |> List.iter
+       (fun domain_records ->
+        let domain_id = (List.hd domain_records).Rt.record_domain_id in
+        if not (List.exists
+                  (fun r -> match record_of_responses_record r with
+                            | CNAME (_, _, r) -> r.record_CNAME_name = "www"
+                            | A (_, _, r) -> r.record_A_name = "www"
+                            | _ -> false)
+                  domain_records)
+        then (print_endline ("Adding 'www' CNAME to " ^ name_of_domain domain_id);
+              ignore (DO.new_CNAME api domain_id "www" "@"))
+        else print_endline (name_of_domain domain_id
+                            ^ " already has a 'www' record"))

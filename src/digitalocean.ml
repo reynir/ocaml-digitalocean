@@ -26,10 +26,10 @@ let request
   try let reply = http_get url in
       if !debug then print_endline reply;
       (try
-	 match (generic_response_of_string reply).status with
-	 | "OK" -> reply
-	 | "ERROR" -> raise (Error (error_of_string reply))
-	 | _ -> failwith "Reply was not wellformed!"
+         match (generic_response_of_string reply).status with
+         | "OK" -> reply
+         | "ERROR" -> raise (Error (error_of_string reply))
+         | _ -> failwith "Reply was not wellformed!"
        with (* Blame DigitalOcean :| *)
        | Yojson.Json_error s -> raise (BadResponse s)
        | Ag_oj_run.Error s -> raise (BadResponse s))
@@ -65,7 +65,7 @@ let new_droplet_raw api ?(priv=false) name size image region ssh_keys  =
   (if ssh_keys = []
    then other_args
    else ("ssh_key_ids",
-	 String.concat "," (List.map string_of_int ssh_keys))
+         String.concat "," (List.map string_of_int ssh_keys))
       :: other_args)
   
 let get_droplet_raw api id =
@@ -291,32 +291,32 @@ let destroy_domain_record api domain record =
 
 let new_CNAME_raw api id name hostname =
   new_domain_record_raw api id [("record_type", "CNAME");
-			    ("name", name);
-			    ("data", hostname)]
+                            ("name", name);
+                            ("data", hostname)]
 
 let new_CNAME api id name hostname =
   to_record (new_CNAME_raw api id name hostname)
 
 let new_A_raw api id name ip =
   new_domain_record_raw api id [("record_type", "A");
-			    ("name", name);
-			    ("data", ip)]
+                            ("name", name);
+                            ("data", ip)]
 
 let new_A api id name ip =
   to_record (new_A_raw api id name ip)
 
 let new_MX_raw api id priority hostname =
   new_domain_record_raw api id [("record_type", "MX");
-			    ("priority", string_of_int priority);
-			    ("data", hostname)]
+                            ("priority", string_of_int priority);
+                            ("data", hostname)]
 
 let new_MX api id priority hostname =
   to_record (new_MX_raw api id priority hostname)
 
 let new_TXT_raw api id name data =
   new_domain_record_raw api id [("record_type", "TXT");
-			    ("name", name);
-			    ("data", data)]
+                            ("name", name);
+                            ("data", data)]
 
 let new_TXT api id name data =
   to_record (new_TXT_raw api id name data)
@@ -329,11 +329,11 @@ let new_NS api id ns =
 
 let new_SRV_raw api id name hostname priority port weight =
   new_domain_record_raw api id [("record_type", "SRV");
-			    ("name", name);
-			    ("data", hostname);
-			    ("priority", string_of_int priority);
-			    ("port", string_of_int port);
-			    ("weight", string_of_int weight)]
+                            ("name", name);
+                            ("data", hostname);
+                            ("priority", string_of_int priority);
+                            ("port", string_of_int port);
+                            ("weight", string_of_int weight)]
 
 let new_SRV api id name hostname priority port weight =
   to_record (new_SRV_raw api id name hostname priority port weight)
@@ -348,9 +348,9 @@ let init () =
   Ssl.init();
     Http_client.Convenience.configure_pipeline
       (fun p ->
-	let ctx = Ssl.create_context Ssl.TLSv1 Ssl.Client_context in
-	let tct = Https_client.https_transport_channel_type ctx in
-	p # configure_transport Http_client.https_cb_id tct
+        let ctx = Ssl.create_context Ssl.TLSv1 Ssl.Client_context in
+        let tct = Https_client.https_transport_channel_type ctx in
+        p # configure_transport Http_client.https_cb_id tct
       )
 
 let () = init ()

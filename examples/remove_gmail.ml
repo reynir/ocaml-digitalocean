@@ -36,6 +36,6 @@ let () =
                         List.mem record_data gmail_records
                      | _ -> false)
     |> List.iter (fun { Rt.record_id } ->
-		  DO.destroy_domain_record api domain_id record_id)
+                  DO.destroy_domain_record api domain_id record_id)
   with
     DO.Error e -> failwith ("DO error: " ^ e.Rt.error_message)
